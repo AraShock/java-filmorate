@@ -128,8 +128,8 @@ class UserControllerTest {
         userOne.setName("Name1");
         userOne.setBirthday(LocalDate.of(2015, 3, 15));
         User user1 = userController.create(userOne);
-        User user2_1 = new User(1, "email2@yandex.ru", "login2", "Name2", LocalDate.of(2015, 3, 15));
-        String jsonRequest = om.writeValueAsString(user2_1);
+        User userTwo = new User(1, "email2@yandex.ru", "login2", "Name2", LocalDate.of(2015, 3, 15));
+        String jsonRequest = om.writeValueAsString(userTwo);
 
         mvc.perform(put("/users").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$.name").value("Name2")).andExpect(jsonPath("$.email").value("email2@yandex.ru"));
     }
@@ -191,9 +191,9 @@ class UserControllerTest {
         userOne.setName("Name1");
         userOne.setBirthday(LocalDate.of(2015, 3, 15));
         User user1 = userController.create(userOne);
-        User user2_1 = new User(1, "email1@yandex.ru", "login2", "Name2", LocalDate.of(2025, 3, 15));
+        User userTwo = new User(1, "email1@yandex.ru", "login2", "Name2", LocalDate.of(2025, 3, 15));
 
-        String jsonRequest = om.writeValueAsString(user2_1);
+        String jsonRequest = om.writeValueAsString(userTwo);
 
         mvc.perform(put("/users").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
