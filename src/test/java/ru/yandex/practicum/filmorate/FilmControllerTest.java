@@ -40,21 +40,21 @@ class FilmControllerTest {
     @SneakyThrows
     @Test
     void findAll() {
-        Film film1_1 = new Film();
-        film1_1.setName("Film 1");
-        film1_1.setDescription("Description Film1");
-        film1_1.setReleaseDate(LocalDate.of(2015, 3, 15));
-        film1_1.setDuration(6315);
-        Film film1 = filmController.create(film1_1);
+        Film film = new Film();
+        film.setName("Film 1");
+        film.setDescription("Description Film1");
+        film.setReleaseDate(LocalDate.of(2015, 3, 15));
+        film.setDuration(6315);
+        Film film1 = filmController.create(film);
         String jsonRequest = om.writeValueAsString(film1);
         mvc.perform(get("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].name").value("Film 1"));
 
-        Film film2_1 = new Film();
-        film2_1.setName("Film 2");
-        film2_1.setDescription("Description Film2");
-        film2_1.setReleaseDate(LocalDate.of(2015, 3, 15));
-        film2_1.setDuration(6315);
-        Film film2 = filmController.create(film2_1);
+        Film filmTwo = new Film();
+        filmTwo.setName("Film 2");
+        filmTwo.setDescription("Description Film2");
+        filmTwo.setReleaseDate(LocalDate.of(2015, 3, 15));
+        filmTwo.setDuration(6315);
+        Film film2 = filmController.create(filmTwo);
         String jsonRequest2 = om.writeValueAsString(film2);
         mvc.perform(get("/films").contentType("application/json").content(jsonRequest2)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[1].name").value("Film 2"));
     }
@@ -70,12 +70,12 @@ class FilmControllerTest {
     @SneakyThrows
     @Test
     void createNormalFilm() {
-        Film film = new Film();
-        film.setName("Film1");
-        film.setDescription("Description Film1");
-        film.setReleaseDate(LocalDate.of(2015, 3, 15));
-        film.setDuration(6315);
-        String jsonRequest = om.writeValueAsString(film);
+        Film filmOne = new Film();
+        filmOne.setName("Film1");
+        filmOne.setDescription("Description Film1");
+        filmOne.setReleaseDate(LocalDate.of(2015, 3, 15));
+        filmOne.setDuration(6315);
+        String jsonRequest = om.writeValueAsString(filmOne);
 
         mvc.perform(post("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$.name", Matchers.containsString("Film1"))).andExpect(jsonPath("$.description").value("Description Film1"));
     }
