@@ -45,8 +45,8 @@ class FilmControllerTest {
         film.setDescription("Description Film1");
         film.setReleaseDate(LocalDate.of(2015, 3, 15));
         film.setDuration(6315);
-        Film film1 = filmController.create(film);
-        String jsonRequest = om.writeValueAsString(film1);
+        Film filmOne = filmController.create(film);
+        String jsonRequest = om.writeValueAsString(filmOne);
         mvc.perform(get("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].name").value("Film 1"));
 
         Film filmTwo = new Film();
@@ -54,8 +54,8 @@ class FilmControllerTest {
         filmTwo.setDescription("Description Film2");
         filmTwo.setReleaseDate(LocalDate.of(2015, 3, 15));
         filmTwo.setDuration(6315);
-        Film film2 = filmController.create(filmTwo);
-        String jsonRequest2 = om.writeValueAsString(film2);
+        filmTwo = filmController.create(filmTwo);
+        String jsonRequest2 = om.writeValueAsString(filmTwo);
         mvc.perform(get("/films").contentType("application/json").content(jsonRequest2)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[1].name").value("Film 2"));
     }
 
@@ -140,10 +140,10 @@ class FilmControllerTest {
         film.setDescription("Description Film1");
         film.setReleaseDate(LocalDate.of(2015, 3, 15));
         film.setDuration(6315);
-        Film film1 = filmController.create(film);
-        Film film2_1 = new Film(1, "Film 2", "Description Film1", LocalDate.of(2015, 3, 15), 6315);
+        film = filmController.create(film);
+        Film filmTwo = new Film(1, "Film 2", "Description Film1", LocalDate.of(2015, 3, 15), 6315);
 
-        String jsonRequest = om.writeValueAsString(film2_1);
+        String jsonRequest = om.writeValueAsString(filmTwo);
 
         mvc.perform(put("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$.name").value("Film 2")).andExpect(jsonPath("$.description").value("Description Film1"));
     }
@@ -156,10 +156,10 @@ class FilmControllerTest {
         film.setDescription("Description Film1");
         film.setReleaseDate(LocalDate.of(2015, 3, 15));
         film.setDuration(6315);
-        Film film1 = filmController.create(film);
-        Film film2_1 = new Film(999, "Film 2", "Description Film1", LocalDate.of(2015, 3, 15), 6315);
+        Film filmOne = filmController.create(film);
+        Film filmTwo = new Film(999, "Film 2", "Description Film1", LocalDate.of(2015, 3, 15), 6315);
 
-        String jsonRequest = om.writeValueAsString(film2_1);
+        String jsonRequest = om.writeValueAsString(filmTwo);
 
         mvc.perform(put("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isNotFound());
     }
@@ -172,10 +172,10 @@ class FilmControllerTest {
         film.setDescription("Description Film1");
         film.setReleaseDate(LocalDate.of(2015, 3, 15));
         film.setDuration(6315);
-        Film film1 = filmController.create(film);
-        Film film2_1 = new Film(1, "", "Description Film1", LocalDate.of(2015, 3, 15), 6315);
+        Film filmOne = filmController.create(film);
+        Film filmTwo = new Film(1, "", "Description Film1", LocalDate.of(2015, 3, 15), 6315);
 
-        String jsonRequest = om.writeValueAsString(film2_1);
+        String jsonRequest = om.writeValueAsString(filmTwo);
 
         mvc.perform(put("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
@@ -188,10 +188,10 @@ class FilmControllerTest {
         film.setDescription("Description Film1");
         film.setReleaseDate(LocalDate.of(2015, 3, 15));
         film.setDuration(6315);
-        Film film1 = filmController.create(film);
-        Film film2_1 = new Film(1, "Film 2", "Description Film1 qwrtywretryterytqwe weyqtrwetyqrwetyr ywtreytqrweytqrweytrqw yrwerweytr" + "wrqeqrwetyqrwe gwehjwgehjg qjwhgejhqwgejhqgw wjejhdtgwetqwyet gweqwgteyqwt wetqywetqyuwte wqtwueytqywuet" + "gehqjwgehjgw gwejhgehjqwgej wjegqjhwegjqhwge qgejqgwejhqgwejhg wjhgejhqgwejhqgw very long description", LocalDate.of(2015, 3, 15), 6315);
+        Film filmOne = filmController.create(film);
+        Film filmTwo = new Film(1, "Film 2", "Description Film1 qwrtywretryterytqwe weyqtrwetyqrwetyr ywtreytqrweytqrweytrqw yrwerweytr" + "wrqeqrwetyqrwe gwehjwgehjg qjwhgejhqwgejhqgw wjejhdtgwetqwyet gweqwgteyqwt wetqywetqyuwte wqtwueytqywuet" + "gehqjwgehjgw gwejhgehjqwgej wjegqjhwegjqhwge qgejqgwejhqgwejhg wjhgejhqgwejhqgw very long description", LocalDate.of(2015, 3, 15), 6315);
 
-        String jsonRequest = om.writeValueAsString(film2_1);
+        String jsonRequest = om.writeValueAsString(filmTwo);
 
         mvc.perform(put("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
@@ -204,10 +204,10 @@ class FilmControllerTest {
         film.setDescription("Description Film1");
         film.setReleaseDate(LocalDate.of(2015, 3, 15));
         film.setDuration(6315);
-        Film film1 = filmController.create(film);
-        Film film2_1 = new Film(1, "Film 2", "Description Film1", LocalDate.of(1894, 3, 15), 6315);
+        Film filmOne = filmController.create(film);
+        Film filmTwo = new Film(1, "Film 2", "Description Film1", LocalDate.of(1894, 3, 15), 6315);
 
-        String jsonRequest = om.writeValueAsString(film2_1);
+        String jsonRequest = om.writeValueAsString(filmTwo);
 
         mvc.perform(put("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
@@ -220,9 +220,9 @@ class FilmControllerTest {
         film.setDescription("Description Film1");
         film.setReleaseDate(LocalDate.of(2015, 3, 15));
         film.setDuration(6315);
-        Film film1 = filmController.create(film);
-        Film film2_1 = new Film(1, "Film 2", "Description Film1", LocalDate.of(2015, 3, 15), -1);
-        String jsonRequest = om.writeValueAsString(film2_1);
+        Film filmOne = filmController.create(film);
+        Film filmTwo = new Film(1, "Film 2", "Description Film1", LocalDate.of(2015, 3, 15), -1);
+        String jsonRequest = om.writeValueAsString(filmTwo);
 
         mvc.perform(put("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }

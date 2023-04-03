@@ -45,8 +45,8 @@ class UserControllerTest {
         userOne.setLogin("login1");
         userOne.setName("Name1");
         userOne.setBirthday(LocalDate.of(2015, 3, 15));
-        User user1 = userController.create(userOne);
-        String jsonRequest = om.writeValueAsString(user1);
+        User user = userController.create(userOne);
+        String jsonRequest = om.writeValueAsString(user);
         mvc.perform(get("/users").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].name").value("Name1"));
 
         User userTwo = new User();
@@ -54,9 +54,9 @@ class UserControllerTest {
         userTwo.setLogin("login2");
         userTwo.setName("Name2");
         userTwo.setBirthday(LocalDate.of(2015, 3, 15));
-        User user2 = userController.create(userTwo);
-        String jsonRequest2 = om.writeValueAsString(user2);
-        mvc.perform(get("/users").contentType("application/json").content(jsonRequest2)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[1].name").value("Name2"));
+        userTwo = userController.create(userTwo);
+        String jsonRequestTwo = om.writeValueAsString(userTwo);
+        mvc.perform(get("/users").contentType("application/json").content(jsonRequestTwo)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[1].name").value("Name2"));
     }
 
     @SneakyThrows
@@ -127,7 +127,7 @@ class UserControllerTest {
         userOne.setLogin("login1");
         userOne.setName("Name1");
         userOne.setBirthday(LocalDate.of(2015, 3, 15));
-        User user1 = userController.create(userOne);
+        User user = userController.create(userOne);
         User userTwo = new User(1, "email2@yandex.ru", "login2", "Name2", LocalDate.of(2015, 3, 15));
         String jsonRequest = om.writeValueAsString(userTwo);
 
@@ -142,7 +142,7 @@ class UserControllerTest {
         userOne.setLogin("login1");
         userOne.setName("Name1");
         userOne.setBirthday(LocalDate.of(2015, 3, 15));
-        User user1 = userController.create(userOne);
+        User user = userController.create(userOne);
         User userTwo = new User(999, "email2@yandex.ru", "login2", "Name2", LocalDate.of(2015, 3, 15));
 
         String jsonRequest = om.writeValueAsString(userTwo);
@@ -158,7 +158,7 @@ class UserControllerTest {
         userOne.setLogin("login1");
         userOne.setName("Name1");
         userOne.setBirthday(LocalDate.of(2015, 3, 15));
-        User user1 = userController.create(userOne);
+        User user = userController.create(userOne);
         User userTwo = new User(1, "email1 yandex.ru", "login2", "Name2", LocalDate.of(2015, 3, 15));
 
         String jsonRequest = om.writeValueAsString(userTwo);
@@ -174,7 +174,7 @@ class UserControllerTest {
         userOne.setLogin("login1");
         userOne.setName("Name1");
         userOne.setBirthday(LocalDate.of(2015, 3, 15));
-        User user1 = userController.create(userOne);
+        User user = userController.create(userOne);
         User userTwo = new User(1, "email1@yandex.ru", "log in2", "Name2", LocalDate.of(2015, 3, 15));
 
         String jsonRequest = om.writeValueAsString(userTwo);
@@ -190,7 +190,7 @@ class UserControllerTest {
         userOne.setLogin("login1");
         userOne.setName("Name1");
         userOne.setBirthday(LocalDate.of(2015, 3, 15));
-        User user1 = userController.create(userOne);
+        User user = userController.create(userOne);
         User userTwo = new User(1, "email1@yandex.ru", "login2", "Name2", LocalDate.of(2025, 3, 15));
 
         String jsonRequest = om.writeValueAsString(userTwo);
