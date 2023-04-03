@@ -135,12 +135,12 @@ class FilmControllerTest {
     @SneakyThrows
     @Test
     void putNormalFilm() {
-        Film film1_1 = new Film();
-        film1_1.setName("Film 1");
-        film1_1.setDescription("Description Film1");
-        film1_1.setReleaseDate(LocalDate.of(2015, 3, 15));
-        film1_1.setDuration(6315);
-        Film film1 = filmController.create(film1_1);
+        Film film = new Film();
+        film.setName("Film 1");
+        film.setDescription("Description Film1");
+        film.setReleaseDate(LocalDate.of(2015, 3, 15));
+        film.setDuration(6315);
+        Film film1 = filmController.create(film);
         Film film2_1 = new Film(1, "Film 2", "Description Film1", LocalDate.of(2015, 3, 15), 6315);
 
         String jsonRequest = om.writeValueAsString(film2_1);
@@ -151,12 +151,12 @@ class FilmControllerTest {
     @SneakyThrows
     @Test
     void putFilmWrongId() {
-        Film film1_1 = new Film();
-        film1_1.setName("Film 1");
-        film1_1.setDescription("Description Film1");
-        film1_1.setReleaseDate(LocalDate.of(2015, 3, 15));
-        film1_1.setDuration(6315);
-        Film film1 = filmController.create(film1_1);
+        Film film = new Film();
+        film.setName("Film 1");
+        film.setDescription("Description Film1");
+        film.setReleaseDate(LocalDate.of(2015, 3, 15));
+        film.setDuration(6315);
+        Film film1 = filmController.create(film);
         Film film2_1 = new Film(999, "Film 2", "Description Film1", LocalDate.of(2015, 3, 15), 6315);
 
         String jsonRequest = om.writeValueAsString(film2_1);
@@ -167,12 +167,12 @@ class FilmControllerTest {
     @SneakyThrows
     @Test
     void putFilmWrongName() {
-        Film film1_1 = new Film();
-        film1_1.setName("Film 1");
-        film1_1.setDescription("Description Film1");
-        film1_1.setReleaseDate(LocalDate.of(2015, 3, 15));
-        film1_1.setDuration(6315);
-        Film film1 = filmController.create(film1_1);
+        Film film = new Film();
+        film.setName("Film 1");
+        film.setDescription("Description Film1");
+        film.setReleaseDate(LocalDate.of(2015, 3, 15));
+        film.setDuration(6315);
+        Film film1 = filmController.create(film);
         Film film2_1 = new Film(1, "", "Description Film1", LocalDate.of(2015, 3, 15), 6315);
 
         String jsonRequest = om.writeValueAsString(film2_1);
@@ -183,12 +183,12 @@ class FilmControllerTest {
     @SneakyThrows
     @Test
     void putFilmWrongDescription() {
-        Film film1_1 = new Film();
-        film1_1.setName("Film 1");
-        film1_1.setDescription("Description Film1");
-        film1_1.setReleaseDate(LocalDate.of(2015, 3, 15));
-        film1_1.setDuration(6315);
-        Film film1 = filmController.create(film1_1);
+        Film film = new Film();
+        film.setName("Film 1");
+        film.setDescription("Description Film1");
+        film.setReleaseDate(LocalDate.of(2015, 3, 15));
+        film.setDuration(6315);
+        Film film1 = filmController.create(film);
         Film film2_1 = new Film(1, "Film 2", "Description Film1 qwrtywretryterytqwe weyqtrwetyqrwetyr ywtreytqrweytqrweytrqw yrwerweytr" + "wrqeqrwetyqrwe gwehjwgehjg qjwhgejhqwgejhqgw wjejhdtgwetqwyet gweqwgteyqwt wetqywetqyuwte wqtwueytqywuet" + "gehqjwgehjgw gwejhgehjqwgej wjegqjhwegjqhwge qgejqgwejhqgwejhg wjhgejhqgwejhqgw very long description", LocalDate.of(2015, 3, 15), 6315);
 
         String jsonRequest = om.writeValueAsString(film2_1);
@@ -199,12 +199,12 @@ class FilmControllerTest {
     @SneakyThrows
     @Test
     void putFilmWrongReleaseDate() {
-        Film film1_1 = new Film();
-        film1_1.setName("Film 1");
-        film1_1.setDescription("Description Film1");
-        film1_1.setReleaseDate(LocalDate.of(2015, 3, 15));
-        film1_1.setDuration(6315);
-        Film film1 = filmController.create(film1_1);
+        Film film = new Film();
+        film.setName("Film 1");
+        film.setDescription("Description Film1");
+        film.setReleaseDate(LocalDate.of(2015, 3, 15));
+        film.setDuration(6315);
+        Film film1 = filmController.create(film);
         Film film2_1 = new Film(1, "Film 2", "Description Film1", LocalDate.of(1894, 3, 15), 6315);
 
         String jsonRequest = om.writeValueAsString(film2_1);
@@ -215,12 +215,12 @@ class FilmControllerTest {
     @SneakyThrows
     @Test
     void putFilmWrongDuration() {
-        Film film1_1 = new Film();
-        film1_1.setName("Film 1");
-        film1_1.setDescription("Description Film1");
-        film1_1.setReleaseDate(LocalDate.of(2015, 3, 15));
-        film1_1.setDuration(6315);
-        Film film1 = filmController.create(film1_1);
+        Film film = new Film();
+        film.setName("Film 1");
+        film.setDescription("Description Film1");
+        film.setReleaseDate(LocalDate.of(2015, 3, 15));
+        film.setDuration(6315);
+        Film film1 = filmController.create(film);
         Film film2_1 = new Film(1, "Film 2", "Description Film1", LocalDate.of(2015, 3, 15), -1);
         String jsonRequest = om.writeValueAsString(film2_1);
 

@@ -40,21 +40,21 @@ class UserControllerTest {
     @SneakyThrows
     @Test
     void findAll() {
-        User user1_1 = new User();
-        user1_1.setEmail("email1@yandex.ru");
-        user1_1.setLogin("login1");
-        user1_1.setName("Name1");
-        user1_1.setBirthday(LocalDate.of(2015, 3, 15));
-        User user1 = userController.create(user1_1);
+        User userOne = new User();
+        userOne.setEmail("email1@yandex.ru");
+        userOne.setLogin("login1");
+        userOne.setName("Name1");
+        userOne.setBirthday(LocalDate.of(2015, 3, 15));
+        User user1 = userController.create(userOne);
         String jsonRequest = om.writeValueAsString(user1);
         mvc.perform(get("/users").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].name").value("Name1"));
 
-        User user2_1 = new User();
-        user2_1.setEmail("email2@yandex.ru");
-        user2_1.setLogin("login2");
-        user2_1.setName("Name2");
-        user2_1.setBirthday(LocalDate.of(2015, 3, 15));
-        User user2 = userController.create(user2_1);
+        User userTwo = new User();
+        userTwo.setEmail("email2@yandex.ru");
+        userTwo.setLogin("login2");
+        userTwo.setName("Name2");
+        userTwo.setBirthday(LocalDate.of(2015, 3, 15));
+        User user2 = userController.create(userTwo);
         String jsonRequest2 = om.writeValueAsString(user2);
         mvc.perform(get("/users").contentType("application/json").content(jsonRequest2)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[1].name").value("Name2"));
     }
@@ -70,12 +70,12 @@ class UserControllerTest {
     @SneakyThrows
     @Test
     void createNormalUser() {
-        User user1 = new User();
-        user1.setEmail("email1@yandex.ru");
-        user1.setLogin("login1");
-        user1.setName("Name1");
-        user1.setBirthday(LocalDate.of(2015, 3, 15));
-        String jsonRequest = om.writeValueAsString(user1);
+        User userOne = new User();
+        userOne.setEmail("email1@yandex.ru");
+        userOne.setLogin("login1");
+        userOne.setName("Name1");
+        userOne.setBirthday(LocalDate.of(2015, 3, 15));
+        String jsonRequest = om.writeValueAsString(userOne);
 
         mvc.perform(post("/users").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$.name", Matchers.containsString("Name1"))).andExpect(jsonPath("$.email").value("email1@yandex.ru"));
     }
@@ -83,12 +83,12 @@ class UserControllerTest {
     @SneakyThrows
     @Test
     void createUserWrongEmail() {
-        User user1 = new User();
-        user1.setEmail("email1yandex.ru");
-        user1.setLogin("login1");
-        user1.setName("Name1");
-        user1.setBirthday(LocalDate.of(2015, 3, 15));
-        String jsonRequest = om.writeValueAsString(user1);
+        User userOne = new User();
+        userOne.setEmail("email1yandex.ru");
+        userOne.setLogin("login1");
+        userOne.setName("Name1");
+        userOne.setBirthday(LocalDate.of(2015, 3, 15));
+        String jsonRequest = om.writeValueAsString(userOne);
 
         mvc.perform(post("/users").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
@@ -96,12 +96,12 @@ class UserControllerTest {
     @SneakyThrows
     @Test
     void createUserWrongLogin() {
-        User user1 = new User();
-        user1.setEmail("email1@yandex.ru");
-        user1.setLogin("lo gi n1");
-        user1.setName("Name1");
-        user1.setBirthday(LocalDate.of(2015, 3, 15));
-        String jsonRequest = om.writeValueAsString(user1);
+        User userOne = new User();
+        userOne.setEmail("email1@yandex.ru");
+        userOne.setLogin("lo gi n1");
+        userOne.setName("Name1");
+        userOne.setBirthday(LocalDate.of(2015, 3, 15));
+        String jsonRequest = om.writeValueAsString(userOne);
 
         mvc.perform(post("/users").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
@@ -109,12 +109,12 @@ class UserControllerTest {
     @SneakyThrows
     @Test
     void createUserWrongBirthday() {
-        User user1 = new User();
-        user1.setEmail("email1@yandex.ru");
-        user1.setLogin("login1");
-        user1.setName("Name1");
-        user1.setBirthday(LocalDate.of(2025, 3, 15));
-        String jsonRequest = om.writeValueAsString(user1);
+        User userOne = new User();
+        userOne.setEmail("email1@yandex.ru");
+        userOne.setLogin("login1");
+        userOne.setName("Name1");
+        userOne.setBirthday(LocalDate.of(2025, 3, 15));
+        String jsonRequest = om.writeValueAsString(userOne);
 
         mvc.perform(post("/users").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
@@ -122,12 +122,12 @@ class UserControllerTest {
     @SneakyThrows
     @Test
     void putNormalUser() {
-        User user1_1 = new User();
-        user1_1.setEmail("email1@yandex.ru");
-        user1_1.setLogin("login1");
-        user1_1.setName("Name1");
-        user1_1.setBirthday(LocalDate.of(2015, 3, 15));
-        User user1 = userController.create(user1_1);
+        User userOne = new User();
+        userOne.setEmail("email1@yandex.ru");
+        userOne.setLogin("login1");
+        userOne.setName("Name1");
+        userOne.setBirthday(LocalDate.of(2015, 3, 15));
+        User user1 = userController.create(userOne);
         User user2_1 = new User(1, "email2@yandex.ru", "login2", "Name2", LocalDate.of(2015, 3, 15));
         String jsonRequest = om.writeValueAsString(user2_1);
 
@@ -137,15 +137,15 @@ class UserControllerTest {
     @SneakyThrows
     @Test
     void putUserWrongId() {
-        User user1_1 = new User();
-        user1_1.setEmail("email1@yandex.ru");
-        user1_1.setLogin("login1");
-        user1_1.setName("Name1");
-        user1_1.setBirthday(LocalDate.of(2015, 3, 15));
-        User user1 = userController.create(user1_1);
-        User user2_1 = new User(999, "email2@yandex.ru", "login2", "Name2", LocalDate.of(2015, 3, 15));
+        User userOne = new User();
+        userOne.setEmail("email1@yandex.ru");
+        userOne.setLogin("login1");
+        userOne.setName("Name1");
+        userOne.setBirthday(LocalDate.of(2015, 3, 15));
+        User user1 = userController.create(userOne);
+        User userTwo = new User(999, "email2@yandex.ru", "login2", "Name2", LocalDate.of(2015, 3, 15));
 
-        String jsonRequest = om.writeValueAsString(user2_1);
+        String jsonRequest = om.writeValueAsString(userTwo);
 
         mvc.perform(put("/users").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isNotFound());
     }
@@ -153,15 +153,15 @@ class UserControllerTest {
     @SneakyThrows
     @Test
     void putUserWrongEmail() {
-        User user1_1 = new User();
-        user1_1.setEmail("email1@yandex.ru");
-        user1_1.setLogin("login1");
-        user1_1.setName("Name1");
-        user1_1.setBirthday(LocalDate.of(2015, 3, 15));
-        User user1 = userController.create(user1_1);
-        User user2_1 = new User(1, "email1 yandex.ru", "login2", "Name2", LocalDate.of(2015, 3, 15));
+        User userOne = new User();
+        userOne.setEmail("email1@yandex.ru");
+        userOne.setLogin("login1");
+        userOne.setName("Name1");
+        userOne.setBirthday(LocalDate.of(2015, 3, 15));
+        User user1 = userController.create(userOne);
+        User userTwo = new User(1, "email1 yandex.ru", "login2", "Name2", LocalDate.of(2015, 3, 15));
 
-        String jsonRequest = om.writeValueAsString(user2_1);
+        String jsonRequest = om.writeValueAsString(userTwo);
 
         mvc.perform(put("/users").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
@@ -169,15 +169,15 @@ class UserControllerTest {
     @SneakyThrows
     @Test
     void putUserWrongLogin() {
-        User user1_1 = new User();
-        user1_1.setEmail("email1@yandex.ru");
-        user1_1.setLogin("login1");
-        user1_1.setName("Name1");
-        user1_1.setBirthday(LocalDate.of(2015, 3, 15));
-        User user1 = userController.create(user1_1);
-        User user2_1 = new User(1, "email1@yandex.ru", "log in2", "Name2", LocalDate.of(2015, 3, 15));
+        User userOne = new User();
+        userOne.setEmail("email1@yandex.ru");
+        userOne.setLogin("login1");
+        userOne.setName("Name1");
+        userOne.setBirthday(LocalDate.of(2015, 3, 15));
+        User user1 = userController.create(userOne);
+        User userTwo = new User(1, "email1@yandex.ru", "log in2", "Name2", LocalDate.of(2015, 3, 15));
 
-        String jsonRequest = om.writeValueAsString(user2_1);
+        String jsonRequest = om.writeValueAsString(userTwo);
 
         mvc.perform(put("/users").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
@@ -185,12 +185,12 @@ class UserControllerTest {
     @SneakyThrows
     @Test
     void putUserWrongBirthday() {
-        User user1_1 = new User();
-        user1_1.setEmail("email1@yandex.ru");
-        user1_1.setLogin("login1");
-        user1_1.setName("Name1");
-        user1_1.setBirthday(LocalDate.of(2015, 3, 15));
-        User user1 = userController.create(user1_1);
+        User userOne = new User();
+        userOne.setEmail("email1@yandex.ru");
+        userOne.setLogin("login1");
+        userOne.setName("Name1");
+        userOne.setBirthday(LocalDate.of(2015, 3, 15));
+        User user1 = userController.create(userOne);
         User user2_1 = new User(1, "email1@yandex.ru", "login2", "Name2", LocalDate.of(2025, 3, 15));
 
         String jsonRequest = om.writeValueAsString(user2_1);
