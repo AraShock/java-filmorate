@@ -47,13 +47,7 @@ class FilmControllerTest {
         film1_1.setDuration(6315);
         Film film1 = filmController.create(film1_1);
         String jsonRequest = om.writeValueAsString(film1);
-        mvc.perform(get("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].name").value("Film 1"));
+        mvc.perform(get("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$", hasSize(1))).andExpect(jsonPath("$[0].name").value("Film 1"));
 
         Film film2_1 = new Film();
         film2_1.setName("Film 2");
@@ -62,13 +56,7 @@ class FilmControllerTest {
         film2_1.setDuration(6315);
         Film film2 = filmController.create(film2_1);
         String jsonRequest2 = om.writeValueAsString(film2);
-        mvc.perform(get("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest2))
-                .andDo(print())
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[1].name").value("Film 2"));
+        mvc.perform(get("/films").contentType("application/json").content(jsonRequest2)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$", hasSize(2))).andExpect(jsonPath("$[1].name").value("Film 2"));
     }
 
     @SneakyThrows
@@ -76,11 +64,7 @@ class FilmControllerTest {
     void createEmptyFilm() {
         String jsonRequest = om.writeValueAsString(" ");
 
-        mvc.perform(post("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        mvc.perform(post("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
 
     @SneakyThrows
@@ -93,13 +77,7 @@ class FilmControllerTest {
         film.setDuration(6315);
         String jsonRequest = om.writeValueAsString(film);
 
-        mvc.perform(post("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$.name", Matchers.containsString("Film1")))
-                .andExpect(jsonPath("$.description").value("Description Film1"));
+        mvc.perform(post("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$.name", Matchers.containsString("Film1"))).andExpect(jsonPath("$.description").value("Description Film1"));
     }
 
     @SneakyThrows
@@ -112,11 +90,7 @@ class FilmControllerTest {
         film.setDuration(6315);
         String jsonRequest = om.writeValueAsString(film);
 
-        mvc.perform(post("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        mvc.perform(post("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
 
     @SneakyThrows
@@ -124,18 +98,12 @@ class FilmControllerTest {
     void createFilmWrongDescription() {
         Film film = new Film();
         film.setName("Film 1");
-        film.setDescription("Description Film1 qwrtywretryterytqwe weyqtrwetyqrwetyr ywtreytqrweytqrweytrqw yrwerweytr" +
-                "wrqeqrwetyqrwe gwehjwgehjg qjwhgejhqwgejhqgw wjejhdtgwetqwyet gweqwgteyqwt wetqywetqyuwte wqtwueytqywuet" +
-                "gehqjwgehjgw gwejhgehjqwgej wjegqjhwegjqhwge qgejqgwejhqgwejhg wjhgejhqgwejhqgw very long description");
+        film.setDescription("Description Film1 qwrtywretryterytqwe weyqtrwetyqrwetyr ywtreytqrweytqrweytrqw yrwerweytr" + "wrqeqrwetyqrwe gwehjwgehjg qjwhgejhqwgejhqgw wjejhdtgwetqwyet gweqwgteyqwt wetqywetqyuwte wqtwueytqywuet" + "gehqjwgehjgw gwejhgehjqwgej wjegqjhwegjqhwge qgejqgwejhqgwejhg wjhgejhqgwejhqgw very long description");
         film.setReleaseDate(LocalDate.of(2015, 3, 15));
         film.setDuration(6315);
         String jsonRequest = om.writeValueAsString(film);
 
-        mvc.perform(post("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        mvc.perform(post("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
 
     @SneakyThrows
@@ -148,11 +116,7 @@ class FilmControllerTest {
         film.setDuration(6315);
         String jsonRequest = om.writeValueAsString(film);
 
-        mvc.perform(post("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        mvc.perform(post("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
 
     @SneakyThrows
@@ -165,11 +129,7 @@ class FilmControllerTest {
         film.setDuration(-1);
         String jsonRequest = om.writeValueAsString(film);
 
-        mvc.perform(post("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        mvc.perform(post("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
 
     @SneakyThrows
@@ -185,13 +145,7 @@ class FilmControllerTest {
 
         String jsonRequest = om.writeValueAsString(film2_1);
 
-        mvc.perform(put("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$.name").value("Film 2"))
-                .andExpect(jsonPath("$.description").value("Description Film1"));
+        mvc.perform(put("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().is(200)).andExpect(jsonPath("$.name").value("Film 2")).andExpect(jsonPath("$.description").value("Description Film1"));
     }
 
     @SneakyThrows
@@ -207,11 +161,7 @@ class FilmControllerTest {
 
         String jsonRequest = om.writeValueAsString(film2_1);
 
-        mvc.perform(put("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().isNotFound());
+        mvc.perform(put("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isNotFound());
     }
 
     @SneakyThrows
@@ -227,11 +177,7 @@ class FilmControllerTest {
 
         String jsonRequest = om.writeValueAsString(film2_1);
 
-        mvc.perform(put("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        mvc.perform(put("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
 
     @SneakyThrows
@@ -243,17 +189,11 @@ class FilmControllerTest {
         film1_1.setReleaseDate(LocalDate.of(2015, 3, 15));
         film1_1.setDuration(6315);
         Film film1 = filmController.create(film1_1);
-        Film film2_1 = new Film(1, "Film 2", "Description Film1 qwrtywretryterytqwe weyqtrwetyqrwetyr ywtreytqrweytqrweytrqw yrwerweytr" +
-                "wrqeqrwetyqrwe gwehjwgehjg qjwhgejhqwgejhqgw wjejhdtgwetqwyet gweqwgteyqwt wetqywetqyuwte wqtwueytqywuet" +
-                "gehqjwgehjgw gwejhgehjqwgej wjegqjhwegjqhwge qgejqgwejhqgwejhg wjhgejhqgwejhqgw very long description", LocalDate.of(2015, 3, 15), 6315);
+        Film film2_1 = new Film(1, "Film 2", "Description Film1 qwrtywretryterytqwe weyqtrwetyqrwetyr ywtreytqrweytqrweytrqw yrwerweytr" + "wrqeqrwetyqrwe gwehjwgehjg qjwhgejhqwgejhqgw wjejhdtgwetqwyet gweqwgteyqwt wetqywetqyuwte wqtwueytqywuet" + "gehqjwgehjgw gwejhgehjqwgej wjegqjhwegjqhwge qgejqgwejhqgwejhg wjhgejhqgwejhqgw very long description", LocalDate.of(2015, 3, 15), 6315);
 
         String jsonRequest = om.writeValueAsString(film2_1);
 
-        mvc.perform(put("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        mvc.perform(put("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
 
     @SneakyThrows
@@ -269,11 +209,7 @@ class FilmControllerTest {
 
         String jsonRequest = om.writeValueAsString(film2_1);
 
-        mvc.perform(put("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        mvc.perform(put("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
 
     @SneakyThrows
@@ -288,10 +224,6 @@ class FilmControllerTest {
         Film film2_1 = new Film(1, "Film 2", "Description Film1", LocalDate.of(2015, 3, 15), -1);
         String jsonRequest = om.writeValueAsString(film2_1);
 
-        mvc.perform(put("/films")
-                        .contentType("application/json")
-                        .content(jsonRequest))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
+        mvc.perform(put("/films").contentType("application/json").content(jsonRequest)).andDo(print()).andExpect(status().isBadRequest());
     }
 }
