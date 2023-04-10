@@ -17,7 +17,7 @@ public class Film {
     private int id;
     @NonNull
     private String name;
-    @JsonFormat(pattern="yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate releaseDate;
     private String description;
     private int duration;
