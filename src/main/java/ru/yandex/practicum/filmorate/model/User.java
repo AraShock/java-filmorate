@@ -1,26 +1,31 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.NonNull;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class User {
-    @NotNull
     private int id;
-    @Email
+    @NonNull
     private String email;
-    @NotBlank
+    @NonNull
     private String login;
     private String name;
-    @NotNull
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate birthday;
-}
+    @Builder.Default
+    private Set<Integer> friends = new HashSet<>();
 
+    public User() {
+        this.friends = new HashSet<>();
+    }
+}
