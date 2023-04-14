@@ -24,8 +24,4 @@ public class Film {
     private int rate;
     @Builder.Default
     private Set<Integer> likes = new HashSet<>();
-
-    public Film() {
-        this.likes = new HashSet<>();
-    }
 }
