@@ -1,28 +1,31 @@
 package ru.yandex.practicum.filmorate.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import ru.yandex.practicum.filmorate.controller.FilmController;
+import lombok.NonNull;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
-@NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class Film {
-    @NotNull
     private int id;
-    @NotBlank
+    @NonNull
     private String name;
-    @Size(min = 1, max = FilmController.LENGTH_OF_DESCRIPTION)
-    private String description;
-    @NotNull
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate releaseDate;
-    @Positive
-    private long duration;
+    private String description;
+    private int duration;
+    private int rate;
+    @Builder.Default
+    private Set<Integer> likes = new HashSet<>();
+
+    public Film() {
+        this.likes = new HashSet<>();
+    }
 }

@@ -1,63 +1,70 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.NotFoundException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.service.ValidationService;
 
-import javax.validation.Valid;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import ru.yandex.practicum.filmorate.service.FilmService;
+
+
+import java.util.*;
 
 @RestController
-@RequestMapping("/films")
+@Slf4j
 public class FilmController {
-    public Map<Integer, Film> films = new HashMap<>();
-    private final Logger log = LoggerFactory.getLogger(FilmController.class);
-    private int idFilm = 1;
-    public static final LocalDate DATE_OF_FIRST_FILM = LocalDate.of(1895, 12, 28);
-    public static final int LENGTH_OF_DESCRIPTION = 200;
+    private final FilmService filmService;
 
-    protected int generateIdFilm() {
-        return idFilm++;
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
     }
 
-    @GetMapping
+    @PostMapping("/films")
+    public Film create(@RequestBody Film film) {
+        log.info("Получен запрос POST /films с параметрами {}", film);
+        return filmService.create(film);
+    }
+
+    @PutMapping("/films")
+    public Film update(@RequestBody Film film) {
+        log.info("Получен запрос PUT /films с параметрами {}", film);
+        return filmService.update(film);
+    }
+
+    @DeleteMapping("/films")
+    public void delete(@RequestBody Film film) {
+        log.info("Получен запрос DELETE /films с параметрами {}", film);
+        filmService.delete(film);
+    }
+
+    @GetMapping("films/{id}")
+    public Film get(@PathVariable int id) {
+        log.info("Получен запрос GET /films/{id} с параметрами {}", id);
+        return filmService.get(id);
+    }
+
+    @GetMapping("/films")
     public List<Film> findAll() {
-        List<Film> filmList = new ArrayList<>(films.values());
-        log.info("Количество всех фильмов: {}", filmList.size());
-        return filmList;
+        log.info("Получен запрос GET /films.");
+        return filmService.findAll();
     }
 
-    @PostMapping
-    public Film create(@Valid @RequestBody Film film) {
-        if (ValidationService.validationFilm(film)) {
-            film.setId(generateIdFilm());
-            films.put(film.getId(), film);
-            log.info("Добавлен фильм: {}", film);
-            return film;
-        }
-        return film;
+    @PutMapping("/films/{id}/like/{userId}")
+    public void likeFilm(@PathVariable("id") int filmId, @PathVariable int userId) {
+        log.info("Получен запрос PUT /films/{id}/like/{userId} с параметрами filmId = {}, userId = {}", filmId, userId);
+        filmService.likeFilm(filmId, userId);
     }
 
-    @PutMapping
+    @DeleteMapping("/films/{id}/like/{userId}")
+    public void dislikeFilm(@PathVariable("id") int filmId, @PathVariable int userId) {
+        log.info("Получен запрос DELETE /films/{id}/like/{userId} с параметрами id = {}, userId = {}", filmId, userId);
+        filmService.dislikeFilm(filmId, userId);
+    }
 
-    public Film put(@Valid @RequestBody Film film) {
-        if (films.containsKey(film.getId())) {
-            if (ValidationService.validationFilm(film)) {
-                films.put(film.getId(), film);
-                log.info("Изменен фильм: {}", film);
-                return film;
-            }
-        } else {
-            log.warn("невозможно обновить несуществующий фильм");
-            throw new NotFoundException("Ошибка обновления - невозможно обновить несуществующий фильм");
-        }
-        return film;
+    @GetMapping("/films/popular")
+    public List<Film> getPopularFilms(@RequestParam(required = false, defaultValue = "10") int count) {
+        log.info("Получен запрос GET /films/popular?count={count} с параметрами count = {}", count);
+        return filmService.getPopularFilms(count);
     }
 }
