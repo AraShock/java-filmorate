@@ -20,7 +20,7 @@ public class User {
     @NonNull
     private String login;
     private String name;
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate birthday;
     @Builder.Default
     private Set<Integer> friends = new HashSet<>();
