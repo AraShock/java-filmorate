@@ -1,0 +1,43 @@
+film
+-
+id PK integer
+name varchar(100)
+releaseDate date
+description varchar(200)
+duration integer
+rate integer
+rating_id integer FK >- rating.id
+
+rating
+-
+id PK integer
+name varchar(10)
+
+genre
+-
+id PK integer
+name varchar(50)
+
+film_genre
+-
+film_id integer FK >- film.id
+genre_id integer FK >- genre.id
+
+favorite_films
+-
+film_id integer FK >- film.id
+user_id integer FK >- user.id
+
+user
+-
+id integer PK
+email varchar(100)
+login varchar(50)
+name varchar(100)
+birthday date
+
+friendship
+-
+user_from integer FK >- user.id
+user_to integer FK >- user.id
+is_confirmed boolean

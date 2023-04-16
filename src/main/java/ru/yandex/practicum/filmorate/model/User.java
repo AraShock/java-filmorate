@@ -24,4 +24,8 @@ public class User {
     private LocalDate birthday;
     @Builder.Default
     private Set<Integer> friends = new HashSet<>();
+
+    public User() {
+        this.friends = new HashSet<>();
+    }
 }

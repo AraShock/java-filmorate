@@ -1,19 +1,15 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.service.ValidationService;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -24,7 +20,7 @@ public class InMemoryUserStorage implements UserStorage {
 
     @Override
     public User create(User user) {
-        check(user);
+        ValidationService.check(user);
         user.setId(++idSequence);
         if (Optional.ofNullable(user.getName()).isEmpty() || user.getName().isEmpty()) {
             user.setName(user.getLogin());
@@ -39,7 +35,7 @@ public class InMemoryUserStorage implements UserStorage {
             log.error("Пользователь с id = {} не найден", user.getId());
             throw new UserNotFoundException("Пользователь с id = " + user.getId() + " не найден");
         }
-        check(user);
+        ValidationService.check(user);
         if (Optional.ofNullable(user.getName()).isEmpty()) {
             user.setName(user.getLogin());
         }
@@ -66,23 +62,36 @@ public class InMemoryUserStorage implements UserStorage {
         return users.get(id);
     }
 
-    private void check(User user) {
-        if (!StringUtils.hasLength(user.getEmail())) {
-            log.warn("Электронная почта не может быть пустой");
-            throw new ValidationException("Электронная почта не может быть пустой");
-        }
-        EmailValidator validator = EmailValidator.getInstance();
-        if (!validator.isValid(user.getEmail())) {
-            log.warn("Электронная почта должна содержать символ @");
-            throw new ValidationException("Электронная почта должна содержать символ @");
-        }
-        if (!StringUtils.hasLength(user.getLogin()) || user.getLogin().contains(" ")) {
-            log.warn("Логин не может быть пустым и содержать пробелы");
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы");
-        }
-        if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.warn("Дата рождения не может быть в будущем");
-            throw new ValidationException("Дата рождения не может быть в будущем");
-        }
+    @Override
+    public void addFriend(int userId, int friendId) {
+        User user = get(userId);
+        User friend = get(friendId);
+
+        user.getFriends().add(friend.getId());
+        friend.getFriends().add(user.getId());
+    }
+
+    @Override
+    public void removeFriend(int userId, int friendId) {
+        User user = get(userId);
+        User friend = get(friendId);
+
+        user.getFriends().remove(friend.getId());
+        friend.getFriends().remove(user.getId());
+    }
+
+    @Override
+    public List<User> getCommonFriends(int userId, int otherId) {
+        User user = get(userId);
+        User other = get(otherId);
+        Set<Integer> commonFriends = new HashSet<>(user.getFriends());
+        commonFriends.retainAll(other.getFriends());
+        return commonFriends.stream().map(this::get).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<User> getUserFriends(int userId) {
+        User user = get(userId);
+        return user.getFriends().stream().map(this::get).collect(Collectors.toList());
     }
 }
