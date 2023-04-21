@@ -11,6 +11,11 @@ import java.time.LocalDate;
 
 @Slf4j
 public final class ValidationService {
+
+
+    private ValidationService() {
+    }
+
     public static void check(User user) {
         if (!StringUtils.hasLength(user.getEmail())) {
             log.warn("Электронная почта не может быть пустой");
@@ -49,4 +54,5 @@ public final class ValidationService {
             throw new ValidationException("Продолжительность фильма должна быть положительной");
         }
     }
+
 }

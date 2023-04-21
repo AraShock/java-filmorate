@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate;
 
 import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -25,345 +26,213 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 class FilmoRateApplicationTests {
-	private final UserDbStorage userStorage;
-	private final FilmDbStorage filmStorage;
+    private final UserDbStorage userStorage;
+    private final FilmDbStorage filmStorage;
 
-	@Test
-	public void testCreateAndUpdateUser() {
-		User user = User.builder()
-				.login("login")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("mail@ya.ru")
-				.name("name")
-				.build();
+    User UserOne;
+    User UserTwo;
+    User UserThree;
+    User UserFour;
+    Film Film;
+    Film FilmOne;
+    Film FilmTwo;
 
-		User createdUser = userStorage.create(user);
-		Optional<User> userOptional = Optional.ofNullable(createdUser);
+    @BeforeEach
+    public void initUsersAndFilms() {
+        UserOne = User.builder().login("login").birthday(LocalDate.of(1987, 01, 01)).email("mail@ya.ru").name("name").build();
+        UserTwo = User.builder().login("login2").birthday(LocalDate.of(1987, 01, 01)).email("mail2@ya.ru").name("name2").build();
+        UserThree = User.builder().login("login3").birthday(LocalDate.of(1987, 01, 01)).email("mail3@ya.ru").name("name3").build();
+        UserFour = User.builder().login("login4").birthday(LocalDate.of(1987, 01, 01)).email("mail4@ya.ru").name("name4").build();
 
-		assertThat(userOptional)
-				.isPresent()
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrProperty("id"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("name", "name"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("email", "mail@ya.ru"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("birthday", LocalDate.of(1987, 01, 01)));
+        Film = Film.builder().name("name").description("description").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).build();
+        FilmOne = Film.builder().name("name1").description("description1").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).build();
+        FilmTwo = Film.builder().name("name1").description("description1").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).build();
+    }
 
-		user = User.builder()
-				.login("updatedLogin")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("newMail@ya.ru")
-				.name("updated name")
-				.id(createdUser.getId())
-				.build();
 
-		userOptional = Optional.ofNullable(userStorage.update(user));
+    @Test
+    public void testCreateAndUpdateUser() {
+        User user = UserOne;
+        User createdUser = userStorage.create(user);
+        Optional<User> userOptional = Optional.ofNullable(createdUser);
 
-		assertThat(userOptional)
-				.isPresent()
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrProperty("id"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("name", "updated name"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("email", "newMail@ya.ru"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("login", "updatedLogin"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("birthday", LocalDate.of(1987, 01, 01)));
-	}
+        assertThat(userOptional).isPresent().hasValueSatisfying(u -> assertThat(u).hasFieldOrProperty("id")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("name", "name")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("email", "mail@ya.ru")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("birthday", LocalDate.of(1987, 01, 01)));
 
-	@Test
-	public void testFindUserById() {
-		User user = User.builder()
-				.login("login")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("mail@ya.ru")
-				.name("name")
-				.build();
+        user = User.builder().login("updatedLogin").birthday(LocalDate.of(1987, 01, 01)).email("newMail@ya.ru").name("updated name").id(createdUser.getId()).build();
 
-		User createdUser = userStorage.create(user);
+        userOptional = Optional.ofNullable(userStorage.update(user));
 
-		Optional<User> userOptional = Optional.ofNullable(userStorage.get(createdUser.getId()));
+        assertThat(userOptional).isPresent().hasValueSatisfying(u -> assertThat(u).hasFieldOrProperty("id")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("name", "updated name")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("email", "newMail@ya.ru")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("login", "updatedLogin")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("birthday", LocalDate.of(1987, 01, 01)));
+    }
 
-		assertThat(userOptional)
-				.isPresent()
-				.hasValueSatisfying(u ->
-						assertThat(u).hasFieldOrPropertyWithValue("id", createdUser.getId())
-				);
-	}
+    @Test
+    public void testFindUserById() {
+        User user = UserOne;
 
-	@Test
-	public void testDeleteUserById() {
-		User user = User.builder()
-				.login("login")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("mail@ya.ru")
-				.name("name")
-				.build();
+        User createdUser = userStorage.create(user);
 
-		User createdUser = userStorage.create(user);
-		int createdUserId = createdUser.getId();
+        Optional<User> userOptional = Optional.ofNullable(userStorage.get(createdUser.getId()));
 
-		userStorage.delete(createdUser);
+        assertThat(userOptional).isPresent().hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("id", createdUser.getId()));
+    }
 
-		assertThrows(UserNotFoundException.class, () -> userStorage.get(createdUserId));
-	}
+    @Test
+    public void testDeleteUserById() {
+        User user = UserOne;
 
-	@Test
-	public void testAddAndGetAndRemoveFriend() {
-		User user1 = User.builder()
-				.login("login")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("mail@ya.ru")
-				.name("name")
-				.build();
-		User createdUser1 = userStorage.create(user1);
-		User user2 = User.builder()
-				.login("login2")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("mail2@ya.ru")
-				.name("name2")
-				.build();
-		User createdUser2 = userStorage.create(user2);
+        User createdUser = userStorage.create(user);
+        int createdUserId = createdUser.getId();
 
-		userStorage.addFriend(createdUser1.getId(), createdUser2.getId());
+        userStorage.delete(createdUser);
 
-		List<User> userFriends = userStorage.getUserFriends(createdUser1.getId());
-		assertEquals(1, userFriends.size());
+        assertThrows(UserNotFoundException.class, () -> userStorage.get(createdUserId));
+    }
 
-		userStorage.removeFriend(createdUser1.getId(), createdUser2.getId());
-		userFriends = userStorage.getUserFriends(createdUser1.getId());
-		assertEquals(0, userFriends.size());
-	}
+    @Test
+    public void testAddAndGetAndRemoveFriend() {
+        User user1 = UserOne;
+        User createdUser1 = userStorage.create(user1);
+        User user2 = UserTwo;
+        User createdUser2 = userStorage.create(user2);
 
-	@Test
-	public void testFindAllUsers() {
-		User user1 = User.builder()
-				.login("login")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("mail@ya.ru")
-				.name("name")
-				.build();
-		User createdUser1 = userStorage.create(user1);
-		User user2 = User.builder()
-				.login("login2")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("mail2@ya.ru")
-				.name("name2")
-				.build();
-		User createdUser2 = userStorage.create(user2);
+        userStorage.addFriend(createdUser1.getId(), createdUser2.getId());
 
-		List<User> all = userStorage.findAll();
-		assertEquals(2, all.size());
-	}
+        List<User> userFriends = userStorage.getUserFriends(createdUser1.getId());
+        assertEquals(1, userFriends.size());
 
-	@Test
-	public void testGetCommonFriend() {
-		User user1 = User.builder()
-				.login("login")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("mail@ya.ru")
-				.name("name")
-				.build();
-		User createdUser1 = userStorage.create(user1);
+        userStorage.removeFriend(createdUser1.getId(), createdUser2.getId());
+        userFriends = userStorage.getUserFriends(createdUser1.getId());
+        assertEquals(0, userFriends.size());
+    }
 
-		User user2 = User.builder()
-				.login("login2")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("mail2@ya.ru")
-				.name("name2")
-				.build();
-		User createdUser2 = userStorage.create(user2);
+    @Test
+    public void testFindAllUsers() {
+        User user1 = User.builder().login("login").birthday(LocalDate.of(1987, 01, 01)).email("mail@ya.ru").name("name").build();
+        User createdUser1 = userStorage.create(user1);
+        User user2 = User.builder().login("login2").birthday(LocalDate.of(1987, 01, 01)).email("mail2@ya.ru").name("name2").build();
+        User createdUser2 = userStorage.create(user2);
 
-		User user3 = User.builder()
-				.login("login3")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("mail3@ya.ru")
-				.name("name3")
-				.build();
-		User createdUser3 = userStorage.create(user3);
+        List<User> all = userStorage.findAll();
+        assertEquals(2, all.size());
+    }
 
-		User user4 = User.builder()
-				.login("login4")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("mail4@ya.ru")
-				.name("name4")
-				.build();
-		User createdUser4 = userStorage.create(user4);
+    @Test
+    public void testGetCommonFriend() {
+        User user1 = UserOne;
+        User createdUser1 = userStorage.create(user1);
 
-		userStorage.addFriend(user1.getId(), user3.getId());
-		userStorage.addFriend(user1.getId(), user4.getId());
-		userStorage.addFriend(user2.getId(), user4.getId());
+        User user2 = UserTwo;
+        User createdUser2 = userStorage.create(user2);
 
-		List<User> common = userStorage.getCommonFriends(user1.getId(), user2.getId());
-		assertEquals(1, common.size());
-		assertEquals(createdUser4.getId(), common.get(0).getId());
-	}
+        User user3 = UserThree;
+        User createdUser3 = userStorage.create(user3);
 
-	@Test
-	public void testGetAllGenres() {
-		List<Genre> allGenres = filmStorage.findAllGenres();
-		for (Genre genre: allGenres) {
-			Optional<Genre> optionalGenre = Optional.ofNullable(genre);
-			assertThat(optionalGenre)
-					.hasValueSatisfying(g -> assertThat(g).hasFieldOrProperty("id"))
-					.hasValueSatisfying(g -> assertThat(g).hasFieldOrProperty("name"));
-		}
+        User user4 = UserFour;
+        User createdUser4 = userStorage.create(user4);
 
-		List<String> expectedValues = Arrays.asList("Комедия", "Драма", "Мультфильм", "Триллер", "Документальный", "Боевик");
+        userStorage.addFriend(user1.getId(), user3.getId());
+        userStorage.addFriend(user1.getId(), user4.getId());
+        userStorage.addFriend(user2.getId(), user4.getId());
 
-		assertTrue(allGenres.stream().map(Genre::getName).collect(Collectors.toSet()).containsAll(expectedValues));
-	}
+        List<User> common = userStorage.getCommonFriends(user1.getId(), user2.getId());
+        assertEquals(1, common.size());
+        assertEquals(createdUser4.getId(), common.get(0).getId());
+    }
 
-	@Test
-	public void testGetAllMpa() {
-		List<Mpa> allMpa = filmStorage.findAllMpa();
-		for (Mpa mpa: allMpa) {
-			Optional<Mpa> optionalGenre = Optional.ofNullable(mpa);
-			assertThat(optionalGenre)
-					.hasValueSatisfying(g -> assertThat(g).hasFieldOrProperty("id"))
-					.hasValueSatisfying(g -> assertThat(g).hasFieldOrProperty("name"));
-		}
+    @Test
+    public void testGetAllGenres() {
+        List<Genre> allGenres = filmStorage.findAllGenres();
+        for (Genre genre : allGenres) {
+            Optional<Genre> optionalGenre = Optional.ofNullable(genre);
+            assertThat(optionalGenre).hasValueSatisfying(g -> assertThat(g).hasFieldOrProperty("id")).hasValueSatisfying(g -> assertThat(g).hasFieldOrProperty("name"));
+        }
 
-		List<String> expectedValues = Arrays.asList("G", "PG", "PG-13", "R", "NC-17");
+        List<String> expectedValues = Arrays.asList("Комедия", "Драма", "Мультфильм", "Триллер", "Документальный", "Боевик");
 
-		assertTrue(allMpa.stream().map(Mpa::getName).collect(Collectors.toSet()).containsAll(expectedValues));
-	}
+        assertTrue(allGenres.stream().map(Genre::getName).collect(Collectors.toSet()).containsAll(expectedValues));
+    }
 
-	@Test
-	public void testCreateAndUpdateAndGetFilm() {
-		Film film = Film.builder()
-				.name("name")
-				.description("description")
-				.rate(1)
-				.duration(100)
-				.releaseDate(LocalDate.of(2020, 01, 01))
-				.mpa(Mpa.builder().id(1).build())
-				.build();
-		Film createdFilm = filmStorage.create(film);
-		int createdFilmId = createdFilm.getId();
+    @Test
+    public void testGetAllMpa() {
+        List<Mpa> allMpa = filmStorage.findAllMpa();
+        for (Mpa mpa : allMpa) {
+            Optional<Mpa> optionalGenre = Optional.ofNullable(mpa);
+            assertThat(optionalGenre).hasValueSatisfying(g -> assertThat(g).hasFieldOrProperty("id")).hasValueSatisfying(g -> assertThat(g).hasFieldOrProperty("name"));
+        }
 
-		Optional<Film> filmOptional = Optional.ofNullable(createdFilm);
+        List<String> expectedValues = Arrays.asList("G", "PG", "PG-13", "R", "NC-17");
 
-		assertThat(filmOptional)
-				.isPresent()
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrProperty("id"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("name", "name"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("rate", 1))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(2020, 01, 01)))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("description", "description"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("duration", 100));
+        assertTrue(allMpa.stream().map(Mpa::getName).collect(Collectors.toSet()).containsAll(expectedValues));
+    }
 
-		Film updated = Film.builder()
-				.id(createdFilmId)
-				.name("updated name")
-				.description("updated description")
-				.rate(1)
-				.duration(200)
-				.mpa(Mpa.builder().id(2).build())
-				.releaseDate(LocalDate.of(2020, 01, 01))
-				.build();
-		Film updatedFilm = filmStorage.update(updated);
-		Optional<Film> filmUpdatedOptional = Optional.ofNullable(updatedFilm);
-		assertThat(filmUpdatedOptional)
-				.isPresent()
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrProperty("id"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("name", "updated name"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("rate", 1))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(2020, 01, 01)))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("description", "updated description"))
-				.hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("duration", 200));
-	}
+    @Test
+    public void testCreateAndUpdateAndGetFilm() {
+        Film film = Film;
+        Film createdFilm = filmStorage.create(film);
+        int createdFilmId = createdFilm.getId();
 
-	@Test
-	public void testDeleteFilm() {
-		Film film = Film.builder()
-				.name("name")
-				.description("description")
-				.rate(1)
-				.duration(100)
-				.releaseDate(LocalDate.of(2020, 01, 01))
-				.mpa(Mpa.builder().id(1).build())
-				.build();
-		Film createdFilm = filmStorage.create(film);
-		int createdFilmId = createdFilm.getId();
+        Optional<Film> filmOptional = Optional.ofNullable(createdFilm);
 
-		filmStorage.delete(createdFilm);
+        assertThat(filmOptional).isPresent().hasValueSatisfying(u -> assertThat(u).hasFieldOrProperty("id")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("name", "name")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("rate", 1)).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(2020, 01, 01))).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("description", "description")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("duration", 100));
 
-		assertThrows(FilmNotFoundException.class, () -> filmStorage.get(createdFilmId));
-	}
+        Film updated = Film.builder().id(createdFilmId).name("updated name").description("updated description").rate(1).duration(200).mpa(Mpa.builder().id(2).build()).releaseDate(LocalDate.of(2020, 01, 01)).build();
+        Film updatedFilm = filmStorage.update(updated);
+        Optional<Film> filmUpdatedOptional = Optional.ofNullable(updatedFilm);
+        assertThat(filmUpdatedOptional).isPresent().hasValueSatisfying(u -> assertThat(u).hasFieldOrProperty("id")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("name", "updated name")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("rate", 1)).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(2020, 01, 01))).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("description", "updated description")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("duration", 200));
+    }
 
-	@Test
-	public void testLikeAndDislikeFilm() {
-		User user1 = User.builder()
-				.login("login")
-				.birthday(LocalDate.of(1987, 01, 01))
-				.email("mail@ya.ru")
-				.name("name")
-				.build();
-		User createdUser1 = userStorage.create(user1);
-		Film film1 = Film.builder()
-				.name("name1")
-				.description("description1")
-				.rate(1)
-				.duration(100)
-				.releaseDate(LocalDate.of(2020, 01, 01))
-				.mpa(Mpa.builder().id(1).build())
-				.build();
-		filmStorage.create(film1);
-		Film film2 = Film.builder()
-				.name("name1")
-				.description("description1")
-				.rate(1)
-				.duration(100)
-				.releaseDate(LocalDate.of(2020, 01, 01))
-				.mpa(Mpa.builder().id(1).build())
-				.build();
-		filmStorage.create(film2);
-		assertEquals(0, filmStorage.get(film1.getId()).getLikes().size());
+    @Test
+    public void testDeleteFilm() {
+        Film film = Film;
+        Film createdFilm = filmStorage.create(film);
+        int createdFilmId = createdFilm.getId();
 
-		filmStorage.likeFilm(film1, createdUser1);
-		filmStorage.likeFilm(film2, createdUser1);
+        filmStorage.delete(createdFilm);
 
-		Set<Integer> likesFilm1 = filmStorage.get(film1.getId()).getLikes();
-		assertEquals(1, likesFilm1.size());
-		assertTrue(likesFilm1.contains(createdUser1.getId()));
+        assertThrows(FilmNotFoundException.class, () -> filmStorage.get(createdFilmId));
+    }
 
-		Set<Integer> likesFilm2 = filmStorage.get(film2.getId()).getLikes();
-		assertEquals(1, likesFilm2.size());
-		assertTrue(likesFilm2.contains(createdUser1.getId()));
+    @Test
+    public void testLikeAndDislikeFilm() {
+        User user1 = UserOne;
+        User createdUser1 = userStorage.create(user1);
+        Film film1 = FilmOne;
+        filmStorage.create(film1);
+        Film film2 = FilmTwo;
+        filmStorage.create(film2);
+        assertEquals(0, filmStorage.get(film1.getId()).getLikes().size());
 
-		filmStorage.dislikeFilm(film1, createdUser1);
-		likesFilm1 = filmStorage.get(film1.getId()).getLikes();
-		assertEquals(0, likesFilm1.size());
-	}
+        filmStorage.likeFilm(film1, createdUser1);
+        filmStorage.likeFilm(film2, createdUser1);
 
-	@Test
-	public void testGetAndUpdateGenre() {
-		Genre genre1 = Genre.builder().id(1).build();
-		Genre genre2 = Genre.builder().id(2).build();
+        Set<Integer> likesFilm1 = filmStorage.get(film1.getId()).getLikes();
+        assertEquals(1, likesFilm1.size());
+        assertTrue(likesFilm1.contains(createdUser1.getId()));
 
-		Set<Genre> genres = new HashSet<>();
-		genres.add(genre1);
-		genres.add(genre2);
+        Set<Integer> likesFilm2 = filmStorage.get(film2.getId()).getLikes();
+        assertEquals(1, likesFilm2.size());
+        assertTrue(likesFilm2.contains(createdUser1.getId()));
 
-		Film film1 = Film.builder()
-				.name("name1")
-				.description("description1")
-				.rate(1)
-				.duration(100)
-				.releaseDate(LocalDate.of(2020, 01, 01))
-				.mpa(Mpa.builder().id(1).build())
-				.genres(genres)
-				.build();
-		Film createdFilm = filmStorage.create(film1);
-		assertEquals(2, createdFilm.getGenres().size());
+        filmStorage.dislikeFilm(film1, createdUser1);
+        likesFilm1 = filmStorage.get(film1.getId()).getLikes();
+        assertEquals(0, likesFilm1.size());
+    }
 
-		film1 = Film.builder()
-				.id(createdFilm.getId())
-				.name("name1")
-				.description("description1")
-				.rate(1)
-				.duration(100)
-				.releaseDate(LocalDate.of(2020, 01, 01))
-				.mpa(Mpa.builder().id(1).build())
-				.genres(new HashSet<>())
-				.build();
-		Film updatedFilm = filmStorage.update(film1);
-		assertEquals(0, updatedFilm.getGenres().size());
-	}
+    @Test
+    public void testGetAndUpdateGenre() {
+        Genre genre1 = Genre.builder().id(1).build();
+        Genre genre2 = Genre.builder().id(2).build();
+
+        Set<Genre> genres = new HashSet<>();
+        genres.add(genre1);
+        genres.add(genre2);
+
+        Film film1 = FilmOne;
+        Film createdFilm = filmStorage.create(film1);
+        assertEquals(2, createdFilm.getGenres().size());
+
+        film1 = Film.builder().id(createdFilm.getId()).name("name1").description("description1").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).genres(new HashSet<>()).build();
+        Film updatedFilm = filmStorage.update(film1);
+        assertEquals(0, updatedFilm.getGenres().size());
+    }
 }
