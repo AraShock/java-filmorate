@@ -29,30 +29,30 @@ class FilmoRateApplicationTests {
     private final UserDbStorage userStorage;
     private final FilmDbStorage filmStorage;
 
-    User UserOne;
-    User UserTwo;
-    User UserThree;
-    User UserFour;
-    Film Film;
-    Film FilmOne;
-    Film FilmTwo;
+    User testUserOne;
+    User testUserTwo;
+    User testUserThree;
+    User testUserFour;
+    Film testFilm;
+    Film testFilmOne;
+    Film testFilmTwo;
 
     @BeforeEach
     public void initUsersAndFilms() {
-        UserOne = User.builder().login("login").birthday(LocalDate.of(1987, 01, 01)).email("mail@ya.ru").name("name").build();
-        UserTwo = User.builder().login("login2").birthday(LocalDate.of(1987, 01, 01)).email("mail2@ya.ru").name("name2").build();
-        UserThree = User.builder().login("login3").birthday(LocalDate.of(1987, 01, 01)).email("mail3@ya.ru").name("name3").build();
-        UserFour = User.builder().login("login4").birthday(LocalDate.of(1987, 01, 01)).email("mail4@ya.ru").name("name4").build();
+        testUserOne = User.builder().login("login").birthday(LocalDate.of(1987, 01, 01)).email("mail@ya.ru").name("name").build();
+        testUserTwo = User.builder().login("login2").birthday(LocalDate.of(1987, 01, 01)).email("mail2@ya.ru").name("name2").build();
+        testUserThree = User.builder().login("login3").birthday(LocalDate.of(1987, 01, 01)).email("mail3@ya.ru").name("name3").build();
+        testUserFour = User.builder().login("login4").birthday(LocalDate.of(1987, 01, 01)).email("mail4@ya.ru").name("name4").build();
 
-        Film = Film.builder().name("name").description("description").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).build();
-        FilmOne = Film.builder().name("name1").description("description1").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).build();
-        FilmTwo = Film.builder().name("name1").description("description1").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).build();
+        testFilm = testFilm.builder().name("name").description("description").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).build();
+        testFilmOne = testFilm.builder().name("name1").description("description1").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).build();
+        testFilmTwo = testFilm.builder().name("name1").description("description1").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).build();
     }
 
 
     @Test
     public void testCreateAndUpdateUser() {
-        User user = UserOne;
+        User user = testUserOne;
         User createdUser = userStorage.create(user);
         Optional<User> userOptional = Optional.ofNullable(createdUser);
 
@@ -67,7 +67,7 @@ class FilmoRateApplicationTests {
 
     @Test
     public void testFindUserById() {
-        User user = UserOne;
+        User user = testUserOne;
 
         User createdUser = userStorage.create(user);
 
@@ -78,7 +78,7 @@ class FilmoRateApplicationTests {
 
     @Test
     public void testDeleteUserById() {
-        User user = UserOne;
+        User user = testUserOne;
 
         User createdUser = userStorage.create(user);
         int createdUserId = createdUser.getId();
@@ -90,9 +90,9 @@ class FilmoRateApplicationTests {
 
     @Test
     public void testAddAndGetAndRemoveFriend() {
-        User user1 = UserOne;
+        User user1 = testUserOne;
         User createdUser1 = userStorage.create(user1);
-        User user2 = UserTwo;
+        User user2 = testUserTwo;
         User createdUser2 = userStorage.create(user2);
 
         userStorage.addFriend(createdUser1.getId(), createdUser2.getId());
@@ -118,16 +118,16 @@ class FilmoRateApplicationTests {
 
     @Test
     public void testGetCommonFriend() {
-        User user1 = UserOne;
+        User user1 = testUserOne;
         User createdUser1 = userStorage.create(user1);
 
-        User user2 = UserTwo;
+        User user2 = testUserTwo;
         User createdUser2 = userStorage.create(user2);
 
-        User user3 = UserThree;
+        User user3 = testUserThree;
         User createdUser3 = userStorage.create(user3);
 
-        User user4 = UserFour;
+        User user4 = testUserFour;
         User createdUser4 = userStorage.create(user4);
 
         userStorage.addFriend(user1.getId(), user3.getId());
@@ -167,7 +167,7 @@ class FilmoRateApplicationTests {
 
     @Test
     public void testCreateAndUpdateAndGetFilm() {
-        Film film = Film;
+        Film film = testFilm;
         Film createdFilm = filmStorage.create(film);
         int createdFilmId = createdFilm.getId();
 
@@ -175,7 +175,7 @@ class FilmoRateApplicationTests {
 
         assertThat(filmOptional).isPresent().hasValueSatisfying(u -> assertThat(u).hasFieldOrProperty("id")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("name", "name")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("rate", 1)).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(2020, 01, 01))).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("description", "description")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("duration", 100));
 
-        Film updated = Film.builder().id(createdFilmId).name("updated name").description("updated description").rate(1).duration(200).mpa(Mpa.builder().id(2).build()).releaseDate(LocalDate.of(2020, 01, 01)).build();
+        Film updated = testFilm.builder().id(createdFilmId).name("updated name").description("updated description").rate(1).duration(200).mpa(Mpa.builder().id(2).build()).releaseDate(LocalDate.of(2020, 01, 01)).build();
         Film updatedFilm = filmStorage.update(updated);
         Optional<Film> filmUpdatedOptional = Optional.ofNullable(updatedFilm);
         assertThat(filmUpdatedOptional).isPresent().hasValueSatisfying(u -> assertThat(u).hasFieldOrProperty("id")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("name", "updated name")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("rate", 1)).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(2020, 01, 01))).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("description", "updated description")).hasValueSatisfying(u -> assertThat(u).hasFieldOrPropertyWithValue("duration", 200));
@@ -183,7 +183,7 @@ class FilmoRateApplicationTests {
 
     @Test
     public void testDeleteFilm() {
-        Film film = Film;
+        Film film = testFilm;
         Film createdFilm = filmStorage.create(film);
         int createdFilmId = createdFilm.getId();
 
@@ -194,11 +194,11 @@ class FilmoRateApplicationTests {
 
     @Test
     public void testLikeAndDislikeFilm() {
-        User user1 = UserOne;
+        User user1 = testUserOne;
         User createdUser1 = userStorage.create(user1);
-        Film film1 = FilmOne;
+        Film film1 = testFilmOne;
         filmStorage.create(film1);
-        Film film2 = FilmTwo;
+        Film film2 = testFilmTwo;
         filmStorage.create(film2);
         assertEquals(0, filmStorage.get(film1.getId()).getLikes().size());
 
@@ -227,11 +227,11 @@ class FilmoRateApplicationTests {
         genres.add(genre1);
         genres.add(genre2);
 
-        Film film1 = FilmOne;
+        Film film1 = testFilmOne;
         Film createdFilm = filmStorage.create(film1);
         assertEquals(2, createdFilm.getGenres().size());
 
-        film1 = Film.builder().id(createdFilm.getId()).name("name1").description("description1").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).genres(new HashSet<>()).build();
+        film1 = testFilm.builder().id(createdFilm.getId()).name("name1").description("description1").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).genres(new HashSet<>()).build();
         Film updatedFilm = filmStorage.update(film1);
         assertEquals(0, updatedFilm.getGenres().size());
     }
