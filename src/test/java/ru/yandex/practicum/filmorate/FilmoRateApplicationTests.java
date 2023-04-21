@@ -37,6 +37,7 @@ class FilmoRateApplicationTests {
     Film testFilmOne;
     Film testFilmTwo;
 
+
     @BeforeEach
     public void initUsersAndFilms() {
         testUserOne = User.builder().login("login").birthday(LocalDate.of(1987, 01, 01)).email("mail@ya.ru").name("name").build();
@@ -47,6 +48,7 @@ class FilmoRateApplicationTests {
         testFilm = testFilm.builder().name("name").description("description").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).build();
         testFilmOne = testFilm.builder().name("name1").description("description1").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).build();
         testFilmTwo = testFilm.builder().name("name1").description("description1").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).build();
+
     }
 
 
@@ -227,7 +229,7 @@ class FilmoRateApplicationTests {
         genres.add(genre1);
         genres.add(genre2);
 
-        Film film1 = testFilmOne;
+        Film film1 = Film.builder().name("name1").description("description1").rate(1).duration(100).releaseDate(LocalDate.of(2020, 01, 01)).mpa(Mpa.builder().id(1).build()).genres(genres).build();
         Film createdFilm = filmStorage.create(film1);
         assertEquals(2, createdFilm.getGenres().size());
 
