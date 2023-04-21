@@ -17,20 +17,20 @@ class FilmControllerTest {
     private final FilmService filmService = new FilmService(new InMemoryFilmStorage(), new InMemoryUserStorage());
     private final FilmController filmController = new FilmController(filmService);
 
-    Film FilmOne;
-    Film FilmTwo;
+    Film filmOne;
+    Film filmTwo;
 
     @BeforeEach
     public void initFilms() {
-        FilmOne = Film.builder().name("name").rate(1).description("description").duration(100).releaseDate(LocalDate.of(2020, 1, 1)).build();
+        filmOne = Film.builder().name("name").rate(1).description("description").duration(100).releaseDate(LocalDate.of(2020, 1, 1)).build();
 
-        FilmTwo = Film.builder().name("name2").rate(2).description("description2").duration(200).releaseDate(LocalDate.of(2002, 12, 28)).build();
+        filmTwo = Film.builder().name("name2").rate(2).description("description2").duration(200).releaseDate(LocalDate.of(2002, 12, 28)).build();
     }
 
 
     @Test
     void create() {
-        Film film = FilmOne;
+        Film film = filmOne;
         Film createdFilm = filmController.create(film);
         assertTrue(createdFilm.getId() > 0);
         assertEquals("name", createdFilm.getName());
@@ -103,7 +103,7 @@ class FilmControllerTest {
 
     @Test
     void update() {
-        Film film = FilmOne;
+        Film film = filmOne;
         filmController.create(film);
 
         Film updateFilm = Film.builder().id(film.getId()).name("name1").rate(2).description("description1").duration(100).releaseDate(LocalDate.of(2000, 12, 28)).build();
@@ -119,7 +119,7 @@ class FilmControllerTest {
 
     @Test
     void updateUnExistedFilm() {
-        Film film = FilmOne;
+        Film film = filmOne;
         filmController.create(film);
 
         Film updateFilm = Film.builder().id(999).name("name1").rate(2).description("description1").duration(100).releaseDate(LocalDate.of(2000, 12, 28)).build();
@@ -132,9 +132,9 @@ class FilmControllerTest {
 
     @Test
     public void getAll() {
-        Film film = FilmOne;
+        Film film = filmOne;
         filmController.create(film);
-        Film film2 = FilmTwo;
+        Film film2 = filmTwo;
         filmController.create(film2);
 
         assertEquals(2, filmController.findAll().size());
