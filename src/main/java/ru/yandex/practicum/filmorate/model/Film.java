@@ -22,10 +22,14 @@ public class Film {
     private String description;
     private int duration;
     private int rate;
+    private Mpa mpa;
+    @Builder.Default
+    private Set<Genre> genres = new HashSet<>();
     @Builder.Default
     private Set<Integer> likes = new HashSet<>();
 
     public Film() {
         this.likes = new HashSet<>();
+        this.genres = new HashSet<>();
     }
 }

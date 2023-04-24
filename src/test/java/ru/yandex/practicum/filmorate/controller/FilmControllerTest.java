@@ -1,12 +1,13 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.FilmNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.impl.InMemoryFilmStorage;
+import ru.yandex.practicum.filmorate.storage.impl.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
@@ -16,9 +17,20 @@ class FilmControllerTest {
     private final FilmService filmService = new FilmService(new InMemoryFilmStorage(), new InMemoryUserStorage());
     private final FilmController filmController = new FilmController(filmService);
 
+    Film filmOne;
+    Film filmTwo;
+
+    @BeforeEach
+    public void initFilms() {
+        filmOne = Film.builder().name("name").rate(1).description("description").duration(100).releaseDate(LocalDate.of(2020, 1, 1)).build();
+
+        filmTwo = Film.builder().name("name2").rate(2).description("description2").duration(200).releaseDate(LocalDate.of(2002, 12, 28)).build();
+    }
+
+
     @Test
     void create() {
-        Film film = Film.builder().name("name").rate(1).description("description").duration(100).releaseDate(LocalDate.of(2020, 1, 1)).build();
+        Film film = filmOne;
         Film createdFilm = filmController.create(film);
         assertTrue(createdFilm.getId() > 0);
         assertEquals("name", createdFilm.getName());
@@ -91,7 +103,7 @@ class FilmControllerTest {
 
     @Test
     void update() {
-        Film film = Film.builder().name("name").rate(1).description("description").duration(100).releaseDate(LocalDate.of(2000, 12, 28)).build();
+        Film film = filmOne;
         filmController.create(film);
 
         Film updateFilm = Film.builder().id(film.getId()).name("name1").rate(2).description("description1").duration(100).releaseDate(LocalDate.of(2000, 12, 28)).build();
@@ -107,7 +119,7 @@ class FilmControllerTest {
 
     @Test
     void updateUnExistedFilm() {
-        Film film = Film.builder().name("name").rate(1).description("description").duration(100).releaseDate(LocalDate.of(2000, 12, 28)).build();
+        Film film = filmOne;
         filmController.create(film);
 
         Film updateFilm = Film.builder().id(999).name("name1").rate(2).description("description1").duration(100).releaseDate(LocalDate.of(2000, 12, 28)).build();
@@ -120,9 +132,9 @@ class FilmControllerTest {
 
     @Test
     public void getAll() {
-        Film film = Film.builder().name("name").rate(1).description("description").duration(100).releaseDate(LocalDate.of(2000, 12, 28)).build();
+        Film film = filmOne;
         filmController.create(film);
-        Film film2 = Film.builder().name("name2").rate(2).description("description2").duration(200).releaseDate(LocalDate.of(2002, 12, 28)).build();
+        Film film2 = filmTwo;
         filmController.create(film2);
 
         assertEquals(2, filmController.findAll().size());

@@ -1,11 +1,12 @@
 package ru.yandex.practicum.filmorate.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.filmorate.exception.UserNotFoundException;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.UserService;
-import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.storage.impl.InMemoryUserStorage;
 
 import java.time.LocalDate;
 
@@ -14,9 +15,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserControllerTest {
     private final UserController userController = new UserController(new UserService(new InMemoryUserStorage()));
 
+    User testUserOne;
+    User testUserTwo;
+
+    @BeforeEach
+    public void initUsers() {
+        testUserOne = User.builder().email("email@ya.ru").login("userLogin").birthday(LocalDate.of(2000, 01, 01)).name("userName").build();
+
+        testUserTwo = User.builder().email("email1@ya.ru").login("userLogin2").birthday(LocalDate.of(2000, 01, 01)).name("userName2").build();
+    }
+
     @Test
     void create() {
-        User user = User.builder().email("email@ya.ru").login("userLogin").birthday(LocalDate.of(2000, 01, 01)).name("userName").build();
+        User user = testUserOne;
         User createdUser = userController.create(user);
         assertTrue(createdUser.getId() > 0);
         assertEquals("email@ya.ru", createdUser.getEmail());
@@ -96,7 +107,7 @@ class UserControllerTest {
 
     @Test
     void update() {
-        User user = User.builder().email("email@ya.ru").login("userLogin").birthday(LocalDate.of(2000, 01, 01)).name("userName").build();
+        User user = testUserOne;
         User createdUser = userController.create(user);
 
         User updateUser = User.builder().id(createdUser.getId()).email("email@ya.ru").login("userLogin1").birthday(LocalDate.of(2000, 01, 01)).name("userName1").build();
@@ -111,7 +122,7 @@ class UserControllerTest {
 
     @Test
     void updateUnExistedUser() {
-        User user = User.builder().email("email@ya.ru").login("userLogin").birthday(LocalDate.of(2000, 01, 01)).name("userName").build();
+        User user = testUserOne;
         User createdUser = userController.create(user);
 
         User updateUser = User.builder().id(999).email("email@ya.ru").login("userLogin1").birthday(LocalDate.of(2000, 01, 01)).name("userName1").build();
@@ -124,10 +135,10 @@ class UserControllerTest {
 
     @Test
     void getAllUsers() {
-        User user1 = User.builder().email("email@ya.ru").login("userLogin").birthday(LocalDate.of(2000, 01, 01)).name("userName").build();
+        User user1 = testUserOne;
         User createdUser1 = userController.create(user1);
 
-        User user2 = User.builder().email("email1@ya.ru").login("userLogin2").birthday(LocalDate.of(2000, 01, 01)).name("userName2").build();
+        User user2 = testUserTwo;
         User createdUser2 = userController.create(user2);
 
         assertEquals(2, userController.findAll().size());
